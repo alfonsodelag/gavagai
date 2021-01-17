@@ -10,8 +10,8 @@ const useGetLanguages = (label, initialState, options) => {
             <label>{label} </label>
             <select>
                 <option value="">-- Select --</option>
-                {options.map(languageValue => (
-                    <option key={languageValue} value={languageValue}>{languageValue}</option>
+                {options.map(languageNames => (
+                    <option key={languageNames} value={languageNames}>{languageNames}</option>
                 ))}
             </select>
         </>

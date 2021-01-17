@@ -5,6 +5,7 @@ import axios from 'axios';
 import useGetLanguages from '../hooks/useGetLanguages';
 import SearchResults from './SearchResults';
 import Spinner from './Spinner/Spinner';
+import ISO6391 from 'iso-639-1';
 
 const icon = <FontAwesomeIcon icon={faSearch} />
 
@@ -28,9 +29,9 @@ function SearchBox() {
 
             const responseData = response.data;
 
-            console.log(responseData);
+            // console.log(responseData);
             setLanguages(Object.keys(responseData).map(i => responseData[i]));
-            console.log("languages", languages);
+            // console.log("languages", languages);
         }
 
         languageSearch();
@@ -62,14 +63,20 @@ function SearchBox() {
 
     // const component = (loading) ? <Spinner /> : { results }
 
-    const languageValues = Object.values(languages)
-    if (languages) {
-        console.log("languageValues", languageValues);
-    }
+
+    const languageCodes = Object.values(languages)
+    // console.log("languageCodes", languageCodes);
+
+    const languageNames = languageCodes.map(languageCode => ISO6391.getName(languageCode.toLowerCase()));
+    // console.log("languageNames", languageNames);
+
+    // const languageNames = languageCodes.map((languageName, index) => ISO6391.getName(languageCodes));
+
+    // console.log("languageNames", languageNames);
 
 
     // Using useGetLanguages
-    const [language, Select] = useGetLanguages("Choose Language ", "", languageValues);
+    const [language, Select] = useGetLanguages("Choose Language ", "", languageNames);
 
     return (
 
@@ -78,20 +85,14 @@ function SearchBox() {
             <h1 className="text-center pb-4">Search for a Term</h1>
             <div className="search">
                 <input onChange={changeInput} className="searchTerm" type="text" placeholder="Please search for a term" value={searchTerm} />
-                <button onClick={() => submitSearch("en")} className="searchButton" type="submit">
+                <button onClick={() => submitSearch(languageNames)} className="searchButton" type="submit">
                     {icon}
                 </button>
             </div>
 
             <div>
                 <Select />
-                {/* Select Language <select onChange={optionHandler} className="select">
-                    <option>-- Select --</option>
-
-                    {languages && languages.map(language => (
-                        <option key={language} value={language} selected>{language}</option>
-                    ))}
-                </select> */}
+                {results}
             </div>
 
             {/* {forWord ? <p>The forword for {setSearchTerm} is {forWord} </p> : ""} */}
