@@ -1,9 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import useGetLanguages from '../hooks/useGetLanguages';
-import SearchResults from './SearchResults';
 import Spinner from './Spinner/Spinner';
 import ISO6391 from 'iso-639-1';
 
@@ -16,8 +16,11 @@ function SearchBox() {
     const [results, setResults] = useState("");
     const [forWord, setForWord] = useState(null);
     const [languages, setLanguages] = useState("");
+    const [languageCode, setLanguageCode] = useState("");
     const [loading, setLoading] = useState(false);
 
+
+    // * Language API Call
     useEffect(() => {
         const languageSearch = async () => {
 
@@ -37,6 +40,8 @@ function SearchBox() {
         languageSearch();
     }, []);
 
+
+    // * Submitting Search to API
     const submitSearch = async (language) => {
 
         if (searchTerm === '') return null;
@@ -46,7 +51,7 @@ function SearchBox() {
         setLoading(true);
         const response = await axios.get(url);
 
-        const forWord = response.data.leftSideNeighbours[0].forWord;
+        const forWord = response.data.leftSideNeighbours[0].word;
         setResults(forWord);
         setLoading(false);
         setSearchTerm("");
@@ -63,39 +68,28 @@ function SearchBox() {
 
     // const component = (loading) ? <Spinner /> : { results }
 
-
     const languageCodes = Object.values(languages)
-    // console.log("languageCodes", languageCodes);
-
     const languageNames = languageCodes.map(languageCode => ISO6391.getName(languageCode.toLowerCase()));
-    // console.log("languageNames", languageNames);
-
-    // const languageNames = languageCodes.map((languageName, index) => ISO6391.getName(languageCodes));
-
-    // console.log("languageNames", languageNames);
-
 
     // Using useGetLanguages
-    const [language, Select] = useGetLanguages("Choose Language ", "", languageNames);
+    const [language, Select] = useGetLanguages("Choose Language ", "", languageNames, languageCodes);
 
     return (
-
 
         <div className="searchbox">
             <h1 className="text-center pb-4">Search for a Term</h1>
             <div className="search">
                 <input onChange={changeInput} className="searchTerm" type="text" placeholder="Please search for a term" value={searchTerm} />
-                <button onClick={() => submitSearch(languageNames)} className="searchButton" type="submit">
+                <button onClick={() => submitSearch("en")} className="searchButton" type="submit">
                     {icon}
                 </button>
             </div>
 
-            <div>
+            <div className="flex">
                 <Select />
-                {results}
             </div>
 
-            {/* {forWord ? <p>The forword for {setSearchTerm} is {forWord} </p> : ""} */}
+            {results}
         </div>
     );
 }
