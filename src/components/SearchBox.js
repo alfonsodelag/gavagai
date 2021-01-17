@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import useGetLanguages from '../hooks/useGetLanguages';
-import Spinner from './Spinner/Spinner';
+// import useGetLanguages from './SelectLanguage';
+// import Spinner from './Spinner/Spinner';
 import ISO6391 from 'iso-639-1';
+import SelectLanguage from './SelectLanguage';
 
 const icon = <FontAwesomeIcon icon={faSearch} />
 
@@ -16,7 +17,7 @@ function SearchBox() {
     const [results, setResults] = useState("");
     const [forWord, setForWord] = useState(null);
     const [languages, setLanguages] = useState("");
-    const [languageCode, setLanguageCode] = useState("");
+    const [langCode, setLangCode] = useState(null);
     const [loading, setLoading] = useState(false);
 
 
@@ -33,6 +34,7 @@ function SearchBox() {
             const responseData = response.data;
 
             // console.log(responseData);
+            // ! These are the codes
             setLanguages(Object.keys(responseData).map(i => responseData[i]));
             // console.log("languages", languages);
         }
@@ -51,7 +53,9 @@ function SearchBox() {
         setLoading(true);
         const response = await axios.get(url);
 
-        const forWord = response.data.leftSideNeighbours[0].word;
+        const responseData = response.data;
+
+        const forWord = responseData.leftSideNeighbours[0].word;
         setResults(forWord);
         setLoading(false);
         setSearchTerm("");
@@ -68,11 +72,24 @@ function SearchBox() {
 
     // const component = (loading) ? <Spinner /> : { results }
 
-    const languageCodes = Object.values(languages)
-    const languageNames = languageCodes.map(languageCode => ISO6391.getName(languageCode.toLowerCase()));
+    // const languageCodes = Object.values(languages)
+    // const codeToLanguage = languages.reduce((languageCode, acc) => {
+    //     acc[languageCode] = ISO6391.getName(languageCode.toLowerCase())
+    //     return acc;
+    // }, {});
+
+    const languageToCode = languages ? languages.reduce((acc, languageCode) => {
+        acc[ISO6391.getName(languageCode.toLowerCase())] = languageCode;
+        return acc;
+    }, {}) : {}
+
+    console.log(languageToCode);
+
 
     // Using useGetLanguages
-    const [language, Select] = useGetLanguages("Choose Language ", "", languageNames, languageCodes);
+    // const [language, Select] = useGetLanguages("Choose Language ", "", languageNames, languageCodes);
+
+    // console.log(setLangCode());
 
     return (
 
@@ -80,13 +97,19 @@ function SearchBox() {
             <h1 className="text-center pb-4">Search for a Term</h1>
             <div className="search">
                 <input onChange={changeInput} className="searchTerm" type="text" placeholder="Please search for a term" value={searchTerm} />
-                <button onClick={() => submitSearch("en")} className="searchButton" type="submit">
+                <button onClick={() => submitSearch(langCode)} className="searchButton" type="submit">
                     {icon}
                 </button>
             </div>
 
             <div className="flex">
-                <Select />
+                <SelectLanguage
+                    label={"Choose Language "}
+                    initialState={""}
+                    languageNames={Object.keys(languageToCode)}
+                    languageToCode={languageToCode}
+                    setLangCode={setLangCode}
+                />
             </div>
 
             {results}
