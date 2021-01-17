@@ -1,9 +1,13 @@
 import React from 'react'
+import Header from './components/Header';
+import SearchBox from './components/SearchBox';
 
 function App() {
+
   return (
-    <div className="App">
-      <h1>Hello from APP.js</h1>
+    <div>
+      <Header />
+      <SearchBox />
     </div>
   );
 }
