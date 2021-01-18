@@ -22,7 +22,7 @@
     display: block;
     width: 25%;
     height: 25%;
-    background-color: #fff;
+    background-color: black;
     border-radius: 100%;
     -webkit-animation: sk-chase-dot-before 2.0s infinite ease-in-out both;
             animation: sk-chase-dot-before 2.0s infinite ease-in-out both; 
