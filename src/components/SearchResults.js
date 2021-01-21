@@ -14,7 +14,7 @@ function SearchResults(props) {
                         <p>The frequency of the word <b>{currentSearchTerm}</b> is: <b>{results.wordInformation.frequency}</b></p>
                         {results.wordInformation.additionalInformation?.link ?
 
-                            <p>Addition information about this word can be found <a target="_blank" rel="noreferrer" href={results.wordInformation.additionalInformation.link}>here</a></p>
+                            <p>Additional information about this word can be found <a target="_blank" rel="noreferrer" href={results.wordInformation.additionalInformation.link}>here</a></p>
                             :
                             null
                         }
