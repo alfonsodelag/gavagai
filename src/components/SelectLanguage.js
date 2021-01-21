@@ -25,10 +25,16 @@ const SelectLanguage = props => {
             }, {}) : {}
 
             setLanguages(languages);
+
+            const navigatorLanguage = languageCodes.find(code => navigator.language.includes(code.toLowerCase()));
+            if (navigatorLanguage) {
+                selectLanguageCode(navigatorLanguage);
+            }
+
         }
 
         languageSearch();
-    }, []);
+    }, [selectLanguageCode]);
 
 
     const changeOption = (e) => {
@@ -37,7 +43,7 @@ const SelectLanguage = props => {
 
     return (
         <>
-            <label>Choose Language </label>
+            <label className="mr-5 justify-between">Choose Language </label>
             <select onChange={changeOption} value={languageCode}>
                 <option value="">-- Select --</option>
                 {languages && Object.entries(languages).map(([code, languageName]) => (
@@ -49,3 +55,6 @@ const SelectLanguage = props => {
 }
 
 export default SelectLanguage;
+
+
+

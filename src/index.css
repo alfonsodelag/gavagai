@@ -47,12 +47,21 @@ code {
   width: 40px;
   height: 36px;
   border: 1px solid #35B6FC;
-  background: #35B6FC;
+  background-color: #35B6FC;
   text-align: center;
   color: #fff;
   border-radius: 0 5px 5px 0;
   cursor: pointer;
   font-size: 20px;
+}
+
+.searchButton:disabled {
+  background-color: grey;
+  border: 1px solid grey;
+}
+
+.disabled .searchTerm {
+  border: 1px solid gray;
 }
 
 .search {

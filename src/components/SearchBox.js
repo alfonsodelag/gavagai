@@ -14,6 +14,7 @@ const icon = <FontAwesomeIcon icon={faSearch} />
 
 function SearchBox() {
     const [searchTerm, setSearchTerm] = useState("");
+    const [currentSearchTerm, setCurrentSearchTerm] = useState("");
     const [results, setResults] = useState("");
     const [languageCode, selectLanguageCode] = useState("");
     const [loading, setLoading] = useState(false);
@@ -31,11 +32,19 @@ function SearchBox() {
 
         const response = await axios.get(url);
 
-        setResults(response.data);
-        setLoading(false);
-        setSearchTerm("");
+        // console.log("response.data of submitSearch", response.data)
 
-        console.log(response.data);
+        const undefinedResult = typeof response.data === "undefined";
+        if (!undefinedResult) {
+            try {
+                setResults(response.data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+
+        setCurrentSearchTerm(searchTerm);
+        setLoading(false);
     }
 
     const changeInput = (e) => {
@@ -47,9 +56,12 @@ function SearchBox() {
 
         <div className="searchbox">
             <h1 className="text-center pb-4">Search for a Term</h1>
-            <div className="search">
+            <div className={
+                (languageCode === "" || searchTerm === "") ? "search disabled" : "search"
+            }>
                 <input onChange={changeInput} className="searchTerm" type="text" placeholder="Please search for a term" value={searchTerm} />
-                <button onClick={() => submitSearch(languageCode)} className="searchButton" type="submit">
+
+                <button onClick={() => submitSearch(languageCode)} className="searchButton " type="submit" disabled={languageCode === "" || searchTerm === ""}>
                     {icon}
                 </button>
             </div>
@@ -63,8 +75,10 @@ function SearchBox() {
 
             {loading ? <Spinner /> : null}
 
-            <SearchResults results={results} />
-
+            <SearchResults
+                results={results}
+                currentSearchTerm={currentSearchTerm}
+            />
         </div>
     );
 }
