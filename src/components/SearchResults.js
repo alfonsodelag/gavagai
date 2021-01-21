@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 function SearchResults(props) {
     const { results, currentSearchTerm } = props;
@@ -25,7 +25,7 @@ function SearchResults(props) {
                     </>
             }
         </div>
-    )
+    );
 }
 
 export default SearchResults;
