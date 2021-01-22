@@ -55,15 +55,15 @@ function SearchBox() {
 
         <div className="searchbox">
             <h1 className="text-center pb-4">Search for a Term</h1>
-            <div className={
+            <form onSubmit={e => { e.preventDefault(); submitSearch(languageCode) }} className={
                 (languageCode === "" || searchTerm === "") ? "search disabled" : "search"
             }>
                 <input onChange={changeInput} className="searchTerm" type="text" placeholder="Please search for a term" value={searchTerm} />
 
-                <button onClick={() => submitSearch(languageCode)} className="searchButton " type="submit" disabled={languageCode === "" || searchTerm === ""}>
+                <button className="searchButton " type="submit" disabled={languageCode === "" || searchTerm === ""}>
                     {icon}
                 </button>
-            </div>
+            </form>
 
             <div className="flex">
                 <SelectLanguage
